@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="double_decker:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/double_decker_jar</output-path>
+    <root id="archive" name="double_decker.jar">
+      <element id="module-output" name="double_decker" />
+    </root>
+  </artifact>
+</component>
