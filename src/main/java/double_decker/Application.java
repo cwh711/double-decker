@@ -104,7 +104,7 @@ public class Application {
             if (Value.TEN.equals(mp.getPileValue())) {
                 DrawPilePanel drawPilePanel = new DrawPilePanel(model.drawPile);
                 layout.setConstraints(drawPilePanel, c);
-                root.add(panel);
+                root.add(drawPilePanel);
             } else if (Value.SEVEN.equals(mp.getPileValue())) {
                 spacer = new JPanel();
                 c.gridwidth = GridBagConstraints.REMAINDER;
