@@ -16,6 +16,8 @@ public class Application {
     GameModel model;
 
     public static final Dimension CARD_SIZE = new Dimension(85,121);
+    public static final Dimension SPACER_SIZE = new Dimension(42, 121);
+
     Application(String[] args) {
         model = new GameModel();
         model.newGame();
@@ -88,10 +90,19 @@ public class Application {
         root.add(panel);
     }
 
+    private JPanel makeSpacer() {
+        JPanel spacer = new JPanel();
+        spacer.setPreferredSize(SPACER_SIZE);
+        spacer.setMaximumSize(SPACER_SIZE);
+        spacer.setMinimumSize(SPACER_SIZE);
+        spacer.setBackground(Color.GREEN);
+        return spacer;
+    }
+
     private void initMainPilesPanels(JPanel root, GridBagLayout layout, GridBagConstraints c) {
         c.gridwidth = 1;
         c.weightx = 0.5;
-        JPanel spacer = new JPanel();
+        JPanel spacer = makeSpacer();
         layout.setConstraints(spacer, c);
         root.add(spacer);
 
@@ -106,19 +117,19 @@ public class Application {
                 layout.setConstraints(drawPilePanel, c);
                 root.add(drawPilePanel);
             } else if (Value.SEVEN.equals(mp.getPileValue())) {
-                spacer = new JPanel();
+                spacer = makeSpacer();
                 c.gridwidth = GridBagConstraints.REMAINDER;
                 layout.setConstraints(spacer, c);
                 root.add(spacer);
 
-                spacer = new JPanel();
+                spacer = makeSpacer();
                 c.gridwidth = 1;
                 c.weightx = 0.5;
                 layout.setConstraints(spacer, c);
                 root.add(spacer);
             }
         }
-        spacer = new JPanel();
+        spacer = makeSpacer();
         c.gridwidth = GridBagConstraints.REMAINDER;
         layout.setConstraints(spacer, c);
         root.add(spacer);
