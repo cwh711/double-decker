@@ -1,5 +1,7 @@
 package double_decker.model;
 
+import java.util.Objects;
+
 /**
  * A representation of a playing-card.
  * Contains distinguishing information of cardback,
@@ -27,5 +29,18 @@ public class Card {
 
     public Value getValue() {
         return value;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Card card = (Card) o;
+        return cardback == card.cardback && suit == card.suit && value == card.value;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(cardback, suit, value);
     }
 }

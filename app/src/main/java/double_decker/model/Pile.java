@@ -5,7 +5,7 @@ import java.util.Deque;
 
 public class Pile {
 
-    private final Deque<Card> cards;
+    protected final Deque<Card> cards;
 
     public Pile() {
         cards = new ArrayDeque<>();

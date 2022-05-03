@@ -11,4 +11,8 @@ public class MainPile extends Pile {
     public Value getPileValue() {
         return pileValue;
     }
+
+    public void addLast(Card c) {
+        cards.addLast(c);
+    }
 }

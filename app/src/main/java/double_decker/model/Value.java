@@ -31,4 +31,13 @@ public enum Value {
     public String getDisplay() {
         return display;
     }
+
+    public static Value fromInt(int n) {
+        for (Value v : values()) {
+            if (v.num == n) {
+                return v;
+            }
+        }
+        return null;
+    }
 }
