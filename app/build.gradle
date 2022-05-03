@@ -9,6 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'jacoco'
 }
 
 repositories {
@@ -28,6 +29,15 @@ application {
     // Define the main class for the application.
     mainClass = 'double_decker.Application'
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+check.dependsOn jacocoTestReport
 
 tasks.named('test') {
     // Use JUnit Platform for unit tests.
