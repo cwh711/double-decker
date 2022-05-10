@@ -2,8 +2,7 @@ package double_decker.view;
 
 import double_decker.Application;
 import double_decker.model.Card;
-import double_decker.model.MainPile;
-import double_decker.model.Value;
+import double_decker.view.listener.HandDragHandler;
 import double_decker.view.listener.MainPileDragHandler;
 
 import javax.imageio.ImageIO;
@@ -12,43 +11,32 @@ import java.awt.*;
 import java.awt.dnd.DnDConstants;
 import java.awt.dnd.DragGestureRecognizer;
 import java.awt.dnd.DragSource;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
 
-public class MainPilePanel extends JPanel {
-    private final MainPile pile;
-    private final Value pileValue;
-    private Image image;
+public class CardPanel extends JPanel {
+    private final Card card;
+    private BufferedImage image;
     private DragGestureRecognizer dgr;
-    private MainPileDragHandler dragHandler;
+    private HandDragHandler dragHandler;
 
-    public MainPilePanel(MainPile pile, Value value) {
-        super();
-        this.pile = pile;
-        this.pileValue = value;
-        updateImage();
+    public CardPanel(Card c) {
+        this.card = c;
         setPreferredSize(Application.CARD_SIZE);
         setMinimumSize(Application.CARD_SIZE);
         setMaximumSize(Application.CARD_SIZE);
-        setOpaque(true);
+
+
+        setImage();
     }
 
-    public MainPile getPile() {
-        return pile;
+    public Card getCard() {
+        return card;
     }
 
-    public Value getPileValue() {
-        return pileValue;
-    }
-
-    public void updateImage() {
-        Card topCard = pile.peekCard();
-        String fileName;
-        if (topCard != null) {
-            fileName = topCard.getFrontImageFileName();
-        } else {
-            fileName = "empty_" + pileValue.getDisplay() + ".png";
-        }
+    private void setImage() {
+        String fileName = card.getFrontImageFileName();
         try {
             URL imgURL = getClass().getClassLoader().getResource(fileName);
             if (imgURL != null) {
@@ -59,7 +47,6 @@ public class MainPilePanel extends JPanel {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-        repaint();
     }
 
     @Override
@@ -72,7 +59,7 @@ public class MainPilePanel extends JPanel {
     public void addNotify() {
         super.addNotify();
         if (dgr == null) {
-            dragHandler = new MainPileDragHandler(this);
+            dragHandler = new HandDragHandler((HandPanel) getParent(), this);
             dgr = DragSource.getDefaultDragSource().createDefaultDragGestureRecognizer(
                     this,
                     DnDConstants.ACTION_MOVE,

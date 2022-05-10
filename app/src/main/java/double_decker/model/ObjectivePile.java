@@ -1,6 +1,6 @@
 package double_decker.model;
 
-public class BuildPile extends Pile{
+public class ObjectivePile extends Pile{
     private final Suit targetSuit;
 
     /**
@@ -15,7 +15,7 @@ public class BuildPile extends Pile{
      * @param suit the Suit of cards this pile will accept
      * @param direction <code>true</code> -> building UP (A-K), <code>false</code> -> building DOWN (K-A)
      */
-    public BuildPile(Suit suit, boolean direction) {
+    public ObjectivePile(Suit suit, boolean direction) {
         super();
         targetSuit = suit;
         this.direction = direction;
@@ -30,7 +30,7 @@ public class BuildPile extends Pile{
     }
 
     @Override
-    public GrabbedCard popCard() {
+    public Card popCard() {
         return null;
     }
 
@@ -47,7 +47,7 @@ public class BuildPile extends Pile{
         }
     }
 
-    protected Value nextValue() {
+    public Value nextValue() {
         if (cards.isEmpty()) {
             return direction ? Value.ACE : Value.KING;
         } else {

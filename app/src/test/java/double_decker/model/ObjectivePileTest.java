@@ -6,9 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BuildPileTest {
+class ObjectivePileTest {
 
-    BuildPile objectUnderTest = new BuildPile(Suit.SPADES, true);
+    ObjectivePile objectUnderTest = new ObjectivePile(Suit.SPADES, true);
 
     @BeforeEach
     void setUp() {
@@ -33,7 +33,7 @@ class BuildPileTest {
 
     @Test
     void popCard() {
-        GrabbedCard actual = objectUnderTest.popCard();
+        Card actual = objectUnderTest.popCard();
         assertNull(actual);
         assertEquals(2, objectUnderTest.cards.size());
     }
@@ -74,7 +74,7 @@ class BuildPileTest {
         assertEquals(Value.ACE, objectUnderTest.nextValue());
 
         //pile building down
-        objectUnderTest = new BuildPile(Suit.SPADES, false);
+        objectUnderTest = new ObjectivePile(Suit.SPADES, false);
         assertEquals(Value.KING, objectUnderTest.nextValue());
 
         objectUnderTest.cards.push(new Card(Cardback.RED, Suit.SPADES, Value.EIGHT));

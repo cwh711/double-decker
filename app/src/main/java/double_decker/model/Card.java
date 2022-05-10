@@ -1,5 +1,6 @@
 package double_decker.model;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -7,7 +8,7 @@ import java.util.Objects;
  * Contains distinguishing information of cardback,
  * suit, and face value.
  */
-public class Card {
+public class Card implements Serializable {
 
     private final Cardback cardback;
     private final Suit suit;
@@ -31,12 +32,24 @@ public class Card {
         return value;
     }
 
+    public String getFrontImageFileName() {
+        return suit.getDisplay() + "_" + value.getDisplay() + ".png";
+    }
+
+    public String getBackImageFileName() {
+        return "backs/" + cardback.getDisplay() + ".png";
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Card card = (Card) o;
         return cardback == card.cardback && suit == card.suit && value == card.value;
+    }
+
+    public boolean equalsIgnoreCardback(Card other) {
+        return (this.suit == other.suit && this.value == other.value);
     }
 
     @Override

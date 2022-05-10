@@ -21,7 +21,7 @@ public class DrawPilePanel extends JPanel {
         setPreferredSize(Application.CARD_SIZE);
         setMinimumSize(Application.CARD_SIZE);
         setMaximumSize(Application.CARD_SIZE);
-        setOpaque(true);
+        createToolTip().setTipText(pile.count() + " cards");
     }
 
     public Pile getPile() {
@@ -43,27 +43,35 @@ public class DrawPilePanel extends JPanel {
         return Application.CARD_SIZE;
     }
 
-    private void updateImage() {
+    public void updateImage() {
         Card topCard = pile.peekCard();
+        String fileName;
         if (topCard != null) {
-            String fileName = "backs/" + topCard.getCardback().getDisplay() + ".png";
-            try {
-                URL imgURL = getClass().getClassLoader().getResource(fileName);
-                if (imgURL != null) {
-                    image = ImageIO.read(imgURL);
-                } else {
-                    System.out.println("Image <" + fileName + "> not found.");
-                }
-            } catch (IOException ioe) {
-                ioe.printStackTrace();
-            }
-            repaint();
+            fileName = topCard.getBackImageFileName();
+        } else {
+            fileName = "empty_deck.png";
         }
+        try {
+            URL imgURL = getClass().getClassLoader().getResource(fileName);
+            if (imgURL != null) {
+                image = ImageIO.read(imgURL);
+            } else {
+                System.out.println("Image <" + fileName + "> not found.");
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+        repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(image, 0, 0, this);
+    }
+
+    @Override
+    public String getToolTipText() {
+        return pile.count() + " cards";
     }
 }

@@ -39,9 +39,8 @@ class PileTest {
     @Test
     void popCard() {
         Card expectedCard = new Card(Cardback.BLUE, Suit.HEARTS, Value.ACE);
-        GrabbedCard actual = objectUnderTest.popCard();
-        assertEquals(expectedCard, actual.getCard());
-        assertEquals(objectUnderTest, actual.getFromPile());
+        Card actual = objectUnderTest.popCard();
+        assertEquals(expectedCard, actual);
         assertEquals(0, objectUnderTest.cards.size());
     }
 
