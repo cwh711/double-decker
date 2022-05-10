@@ -1,22 +1,21 @@
-package double_decker.model;
+package double_decker.model.dnd;
+
+import double_decker.model.Card;
+import double_decker.model.MainPile;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.util.Objects;
 
-public class GrabbedCard implements Transferable {
+public class TransferableCard implements Transferable {
 
     private final Card card;
-    private final Pile fromPile;
+    private final MainPile fromPile;
 
-    private static final DataFlavor[] dataFlavors = new DataFlavor[]{
-            new DataFlavor(GrabbedCard.class, "grabbedCard"),
-            new DataFlavor(Card.class, "card"),
-            new DataFlavor(Pile.class, "pile")
-    };
+    private static final DataFlavor[] dataFlavors = new DataFlavor[]{CardDataFlavor.INSTANCE};
 
-    public GrabbedCard(Card card, Pile from) {
+    public TransferableCard(Card card, MainPile from) {
         this.card = card;
         this.fromPile = from;
     }
@@ -25,7 +24,7 @@ public class GrabbedCard implements Transferable {
         return card;
     }
 
-    public Pile getFromPile() {
+    public MainPile getFromPile() {
         return fromPile;
     }
 
@@ -56,7 +55,7 @@ public class GrabbedCard implements Transferable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GrabbedCard that = (GrabbedCard) o;
+        TransferableCard that = (TransferableCard) o;
         return card.equals(that.card) && fromPile.equals(that.fromPile);
     }
 

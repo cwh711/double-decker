@@ -5,8 +5,10 @@ import java.util.*;
 public class GameModel {
     public final List<MainPile> numberedPiles = initNumberedPiles();
     public final Pile drawPile = new Pile();
-    public Map<Suit,BuildPile> buildUpPiles = initBuildPiles(true);
-    public Map<Suit,BuildPile> buildDownPiles = initBuildPiles(false);
+    public final Map<Suit, ObjectivePile> buildUpPiles = initBuildPiles(true);
+    public final Map<Suit, ObjectivePile> buildDownPiles = initBuildPiles(false);
+    public final Hand hand = new Hand();
+    public int score = 0;
 
     public GameModel() {
     }
@@ -16,19 +18,22 @@ public class GameModel {
         List<Card> allCards = generateDecks();
         Collections.shuffle(allCards);
         deal(allCards);
+        score -= Constants.COST_PER_GAME;
     }
 
     public void resetGame() {
-        for (Pile np : numberedPiles) {
+        hand.putDownPile();
+        for (MainPile np : numberedPiles) {
             np.clear();
         }
         drawPile.clear();
-        for (BuildPile bup : buildUpPiles.values()) {
+        for (ObjectivePile bup : buildUpPiles.values()) {
             bup.clear();
         }
-        for (BuildPile bdp : buildDownPiles.values()) {
+        for (ObjectivePile bdp : buildDownPiles.values()) {
             bdp.clear();
         }
+
     }
 
     private List<Card> generateDecks() {
@@ -51,10 +56,10 @@ public class GameModel {
         return Collections.unmodifiableList(temp);
     }
 
-    private static Map<Suit,BuildPile> initBuildPiles(boolean direction) {
-        Map<Suit,BuildPile> temp = new HashMap<>();
+    private static Map<Suit, ObjectivePile> initBuildPiles(boolean direction) {
+        Map<Suit, ObjectivePile> temp = new HashMap<>();
         for (Suit s : Suit.values()) {
-            temp.put(s, new BuildPile(s, direction));
+            temp.put(s, new ObjectivePile(s, direction));
         }
         return Collections.unmodifiableMap(temp);
     }
@@ -93,4 +98,9 @@ public class GameModel {
             dealToPile(deck, drawPile);
         }
     }
+
+    public MainPile getMainPileForValue(Value v) {
+        return numberedPiles.get(v.getNum() - 1);
+    }
+
 }

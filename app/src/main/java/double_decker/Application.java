@@ -1,22 +1,21 @@
 package double_decker;
 
-import double_decker.model.GameModel;
-import double_decker.model.MainPile;
-import double_decker.model.Suit;
-import double_decker.model.Value;
-import double_decker.view.DrawPilePanel;
-import double_decker.view.MainPilePanel;
-import double_decker.view.ObjectivePilePanel;
+import double_decker.model.*;
+import double_decker.view.*;
+import double_decker.view.listener.DrawPileMouseHandler;
+import double_decker.view.listener.MenuActionHandler;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.InputEvent;
+import java.awt.event.KeyEvent;
 
 public class Application {
 
     GameModel model;
+    JFrame window;
 
     public static final Dimension CARD_SIZE = new Dimension(85,121);
-    public static final Dimension SPACER_SIZE = new Dimension(42, 121);
 
     Application(String[] args) {
         model = new GameModel();
@@ -25,9 +24,11 @@ public class Application {
 
     public void show() {
         JFrame frame = new JFrame("Double-decker Solitaire");
+        this.window = frame;
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setSize(new Dimension(1000, 800));
-        JPanel root = new JPanel();
+        frame.setSize(new Dimension(1000, 1000));
+
+        RootPanel root = new RootPanel(model);
         GridBagLayout gbLayout = new GridBagLayout();
         root.setLayout(gbLayout);
         GridBagConstraints c = new GridBagConstraints();
@@ -48,72 +49,111 @@ public class Application {
 
         initHandPanel(root, gbLayout, c);
 
-        frame.setContentPane(root);
+        initMenu(root);
+
+        JPanel statusBar = new JPanel();
+        statusBar.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+        statusBar.setLayout(new BorderLayout());
+        JLabel logLabel = new JLabel("Started new game...");
+        statusBar.add(logLabel, BorderLayout.WEST);
+        JLabel scoreLabel = new JLabel();
+        statusBar.add(scoreLabel, BorderLayout.EAST);
+        root.setLabels(logLabel, scoreLabel);
+        root.incrementScore(0);
+
+        JPanel containerPanel = new JPanel();
+        containerPanel.setLayout(new BorderLayout());
+        containerPanel.add(root, BorderLayout.NORTH);
+        containerPanel.add(statusBar, BorderLayout.SOUTH);
+
+        frame.setContentPane(containerPanel);
         frame.pack();
         frame.setVisible(true);
     }
 
-    private void initObjectivePilesPanels(JPanel root, GridBagLayout layout, GridBagConstraints c) {
+    private void initMenu(RootPanel root) {
+        JMenuBar menuBar = new JMenuBar();
+        JMenu gameMenu = new JMenu("Game");
+        menuBar.add(gameMenu);
 
-        c.gridwidth = 2;
-        ObjectivePilePanel panel = new ObjectivePilePanel(model.buildUpPiles.get(Suit.HEARTS));
+        JMenuItem newGameMenuItem = new JMenuItem(Constants.MENU_TEXT_NEW_GAME, KeyEvent.VK_N);
+        newGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
+        gameMenu.add(newGameMenuItem);
+
+        JMenuItem hintMenuItem = new JMenuItem(Constants.MENU_TEXT_HINT, KeyEvent.VK_H);
+        hintMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_DOWN_MASK));
+        gameMenu.add(hintMenuItem);
+
+        MenuActionHandler handler = new MenuActionHandler(model, root);
+        newGameMenuItem.addActionListener(handler);
+        hintMenuItem.addActionListener(handler);
+
+        window.setJMenuBar(menuBar);
+    }
+
+    private void initObjectivePilesPanels(RootPanel root, GridBagLayout layout, GridBagConstraints c) {
+
+        c.gridwidth = 1;
+        ObjectivePilePanel panel = new ObjectivePilePanel(root, model, Suit.HEARTS, true);
         layout.setConstraints(panel, c);
         root.add(panel);
 
-        panel = new ObjectivePilePanel(model.buildUpPiles.get(Suit.SPADES));
+        panel = new ObjectivePilePanel(root, model, Suit.SPADES, true);
         layout.setConstraints(panel, c);
         root.add(panel);
 
-        panel = new ObjectivePilePanel(model.buildUpPiles.get(Suit.DIAMONDS));
+        panel = new ObjectivePilePanel(root, model, Suit.DIAMONDS, true);
         layout.setConstraints(panel, c);
         root.add(panel);
 
-        panel = new ObjectivePilePanel(model.buildUpPiles.get(Suit.CLUBS));
+        panel = new ObjectivePilePanel(root, model, Suit.CLUBS,true);
         layout.setConstraints(panel, c);
         root.add(panel);
 
-        panel = new ObjectivePilePanel(model.buildDownPiles.get(Suit.CLUBS));
+        JPanel keyPanel = new ImagePanel("key.png", CARD_SIZE);
+        layout.setConstraints(keyPanel, c);
+        root.add(keyPanel);
+
+        panel = new ObjectivePilePanel(root, model, Suit.CLUBS, false);
         layout.setConstraints(panel, c);
         root.add(panel);
 
-        panel = new ObjectivePilePanel(model.buildDownPiles.get(Suit.DIAMONDS));
+        panel = new ObjectivePilePanel(root, model, Suit.DIAMONDS, false);
         layout.setConstraints(panel, c);
         root.add(panel);
 
-        panel = new ObjectivePilePanel(model.buildDownPiles.get(Suit.SPADES));
+        panel = new ObjectivePilePanel(root, model, Suit.SPADES, false);
         layout.setConstraints(panel, c);
         root.add(panel);
 
         c.gridwidth = GridBagConstraints.REMAINDER;
-        panel = new ObjectivePilePanel(model.buildDownPiles.get(Suit.HEARTS));
+        panel = new ObjectivePilePanel(root, model, Suit.HEARTS, false);
         layout.setConstraints(panel, c);
         root.add(panel);
     }
 
     private JPanel makeSpacer() {
         JPanel spacer = new JPanel();
-        spacer.setPreferredSize(SPACER_SIZE);
-        spacer.setMaximumSize(SPACER_SIZE);
-        spacer.setMinimumSize(SPACER_SIZE);
-        spacer.setBackground(Color.GREEN);
+        spacer.setPreferredSize(CARD_SIZE);
+        spacer.setMaximumSize(CARD_SIZE);
+        spacer.setMinimumSize(CARD_SIZE);
         return spacer;
     }
 
-    private void initMainPilesPanels(JPanel root, GridBagLayout layout, GridBagConstraints c) {
+    private void initMainPilesPanels(RootPanel root, GridBagLayout layout, GridBagConstraints c) {
         c.gridwidth = 1;
-        c.weightx = 0.5;
         JPanel spacer = makeSpacer();
         layout.setConstraints(spacer, c);
         root.add(spacer);
 
         for (MainPile mp : model.numberedPiles) {
-            c.gridwidth = 2;
-            c.weightx = 1;
+            c.gridwidth = 1;
             MainPilePanel panel = new MainPilePanel(mp, mp.getPileValue());
             layout.setConstraints(panel, c);
             root.add(panel);
             if (Value.TEN.equals(mp.getPileValue())) {
                 DrawPilePanel drawPilePanel = new DrawPilePanel(model.drawPile);
+                drawPilePanel.addMouseListener(new DrawPileMouseHandler(root, model));
                 layout.setConstraints(drawPilePanel, c);
                 root.add(drawPilePanel);
             } else if (Value.SEVEN.equals(mp.getPileValue())) {
@@ -124,7 +164,6 @@ public class Application {
 
                 spacer = makeSpacer();
                 c.gridwidth = 1;
-                c.weightx = 0.5;
                 layout.setConstraints(spacer, c);
                 root.add(spacer);
             }
@@ -135,11 +174,8 @@ public class Application {
         root.add(spacer);
     }
 
-    private void initHandPanel(JPanel root, GridBagLayout layout, GridBagConstraints c) {
-        JPanel handPanel = new JPanel();
-        JButton button = new JButton();
-        button.setText("Draw size: " + model.drawPile.count());
-        handPanel.add(button);
+    private void initHandPanel(RootPanel root, GridBagLayout layout, GridBagConstraints c) {
+        HandPanel handPanel = new HandPanel(model);
         c.gridwidth = GridBagConstraints.REMAINDER;
         layout.setConstraints(handPanel, c);
         root.add(handPanel);

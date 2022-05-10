@@ -20,8 +20,8 @@ public class Pile {
         return true;
     }
 
-    public GrabbedCard popCard() {
-        return new GrabbedCard(cards.pop(), this);
+    public Card popCard() {
+        return cards.pop();
     }
 
     public Card peekCard() {
