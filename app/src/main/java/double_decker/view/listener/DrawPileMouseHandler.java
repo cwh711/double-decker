@@ -8,7 +8,6 @@ import double_decker.view.HandPanel;
 import double_decker.view.RootPanel;
 
 import javax.swing.event.MouseInputAdapter;
-import java.awt.*;
 import java.awt.event.MouseEvent;
 
 public class DrawPileMouseHandler extends MouseInputAdapter {

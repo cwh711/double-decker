@@ -3,7 +3,6 @@ package double_decker.view;
 import double_decker.Application;
 import double_decker.model.Card;
 import double_decker.view.listener.HandDragHandler;
-import double_decker.view.listener.MainPileDragHandler;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;

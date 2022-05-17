@@ -1,7 +1,5 @@
 package double_decker.view;
 
-import double_decker.Application;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;

@@ -1,7 +1,16 @@
 package double_decker;
 
-import double_decker.model.*;
-import double_decker.view.*;
+import double_decker.model.Constants;
+import double_decker.model.GameModel;
+import double_decker.model.MainPile;
+import double_decker.model.Suit;
+import double_decker.model.Value;
+import double_decker.view.DrawPilePanel;
+import double_decker.view.HandPanel;
+import double_decker.view.ImagePanel;
+import double_decker.view.MainPilePanel;
+import double_decker.view.ObjectivePilePanel;
+import double_decker.view.RootPanel;
 import double_decker.view.listener.DrawPileMouseHandler;
 import double_decker.view.listener.MenuActionHandler;
 

@@ -1,7 +1,6 @@
 package double_decker.view.listener;
 
 import double_decker.model.Card;
-import double_decker.model.GameModel;
 import double_decker.model.dnd.CardDataFlavor;
 import double_decker.view.ObjectivePilePanel;
 import double_decker.view.RootPanel;
