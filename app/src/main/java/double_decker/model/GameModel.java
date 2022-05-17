@@ -8,6 +8,7 @@ public class GameModel {
     public final Map<Suit, ObjectivePile> buildUpPiles = initBuildPiles(true);
     public final Map<Suit, ObjectivePile> buildDownPiles = initBuildPiles(false);
     public final Hand hand = new Hand();
+    public boolean scoreEnabled = true;
     public int score = 0;
 
     public GameModel() {
@@ -101,6 +102,20 @@ public class GameModel {
 
     public MainPile getMainPileForValue(Value v) {
         return numberedPiles.get(v.getNum() - 1);
+    }
+
+    public boolean isNewGameState() {
+        for (ObjectivePile p : buildUpPiles.values()) {
+            if (p.cards.size() > 0) {
+                return false;
+            }
+        }
+        for (ObjectivePile p : buildDownPiles.values()) {
+            if (p.cards.size() > 0) {
+                return false;
+            }
+        }
+        return hand.getCards().size() <= 0;
     }
 
 }

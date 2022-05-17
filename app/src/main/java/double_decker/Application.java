@@ -32,8 +32,6 @@ public class Application {
         GridBagLayout gbLayout = new GridBagLayout();
         root.setLayout(gbLayout);
         GridBagConstraints c = new GridBagConstraints();
-        c.weightx = 1;
-        c.weighty = 1;
 
         initObjectivePilesPanels(root, gbLayout, c);
         c.gridwidth = GridBagConstraints.REMAINDER;
@@ -59,7 +57,7 @@ public class Application {
         JLabel scoreLabel = new JLabel();
         statusBar.add(scoreLabel, BorderLayout.EAST);
         root.setLabels(logLabel, scoreLabel);
-        root.incrementScore(0);
+        root.updateScore();
 
         JPanel containerPanel = new JPanel();
         containerPanel.setLayout(new BorderLayout());
@@ -74,7 +72,9 @@ public class Application {
     private void initMenu(RootPanel root) {
         JMenuBar menuBar = new JMenuBar();
         JMenu gameMenu = new JMenu("Game");
+        JMenu optionMenu = new JMenu("Option");
         menuBar.add(gameMenu);
+        menuBar.add(optionMenu);
 
         JMenuItem newGameMenuItem = new JMenuItem(Constants.MENU_TEXT_NEW_GAME, KeyEvent.VK_N);
         newGameMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F2, 0));
@@ -84,9 +84,14 @@ public class Application {
         hintMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_H, InputEvent.CTRL_DOWN_MASK));
         gameMenu.add(hintMenuItem);
 
+        JCheckBoxMenuItem scoreOptionMenuItem = new JCheckBoxMenuItem("Enable Scoring?", model.scoreEnabled);
+        optionMenu.add(scoreOptionMenuItem);
+
         MenuActionHandler handler = new MenuActionHandler(model, root);
         newGameMenuItem.addActionListener(handler);
         hintMenuItem.addActionListener(handler);
+        scoreOptionMenuItem.addActionListener(handler);
+
 
         window.setJMenuBar(menuBar);
     }

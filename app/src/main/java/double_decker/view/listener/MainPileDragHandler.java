@@ -28,6 +28,7 @@ public class MainPileDragHandler implements DragGestureListener, DragSourceListe
     @Override
     public void dragGestureRecognized(DragGestureEvent dge) {
         MainPile fromPile = fromPanel.getPile();
+        if (fromPile.count() == 0) { return; }
         Card draggedCard = fromPile.popCard();
 
         Image image = null;

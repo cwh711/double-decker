@@ -25,7 +25,9 @@ public class MenuActionHandler implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         JMenuItem source = (JMenuItem) e.getSource();
-        if (Constants.MENU_TEXT_NEW_GAME.equals(source.getText())) {
+        if (source instanceof JCheckBoxMenuItem) {
+            handleCheckboxAction((JCheckBoxMenuItem) source);
+        } else if (Constants.MENU_TEXT_NEW_GAME.equals(source.getText())) {
             model.newGame();
             root.refresh();
             root.repaint();
@@ -80,5 +82,26 @@ public class MenuActionHandler implements ActionListener {
             ie.printStackTrace();
         }
         hintPanel.setBorder(null);
+    }
+
+    private void handleCheckboxAction(JCheckBoxMenuItem menuItem) {
+        boolean oldValue = model.scoreEnabled, newValue = menuItem.getState();
+
+        if (oldValue ^ newValue) {
+            model.scoreEnabled = newValue;
+            if (!newValue) {
+                model.score = 0;
+                root.setCurrentGameScored(false);
+                root.updateScore();
+            } else {
+                if (model.isNewGameState()) {
+                    model.score = -Constants.COST_PER_GAME;
+                    root.setCurrentGameScored(true);
+                    root.updateScore();
+                } else {
+                    JOptionPane.showMessageDialog(JOptionPane.getRootFrame(), "Scoring will resume with the next new game.", "Notice", JOptionPane.PLAIN_MESSAGE, null);
+                }
+            }
+        }
     }
 }

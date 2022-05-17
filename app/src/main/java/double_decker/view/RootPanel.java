@@ -19,6 +19,7 @@ public class RootPanel extends JPanel {
     private HandPanel handPanel;
     private JLabel logLabel;
     private JLabel scoreLabel;
+    private boolean isCurrentGameScored = true;
 
     public RootPanel(GameModel model) {
         this.model = model;
@@ -37,7 +38,10 @@ public class RootPanel extends JPanel {
         drawPilePanel.updateImage();
         handPanel.updateCards();
         displayLog("Started new game...");
-        incrementScore(0);
+        if (model.scoreEnabled) {
+            isCurrentGameScored = true;
+            updateScore();
+        }
     }
 
     public void setLabels(JLabel logLabel, JLabel scoreLabel) {
@@ -83,15 +87,28 @@ public class RootPanel extends JPanel {
         return handPanel;
     }
 
+    public void setCurrentGameScored(boolean value) {
+        this.isCurrentGameScored = value;
+    }
+
     public void displayLog(String text) {
         logLabel.setText(text);
     }
 
+    public void updateScore() {
+        incrementScore(0);
+    }
+
     public void incrementScore(int increment) {
-        model.score += increment;
-        boolean isPositive = model.score > 0;
-        String newText = isPositive ? "$" + model.score : "($" + (-model.score) + ")";
-        scoreLabel.setText(newText);
-        scoreLabel.setForeground(isPositive ? Color.BLACK : Color.RED);
+        if (isCurrentGameScored) {
+            model.score += increment;
+            boolean isPositive = model.score > 0;
+            String newText = isPositive ? "$" + model.score : "($" + (-model.score) + ")";
+            scoreLabel.setText(newText);
+            scoreLabel.setForeground(isPositive ? Color.BLACK : Color.RED);
+            scoreLabel.setVisible(true);
+        } else {
+            scoreLabel.setVisible(false);
+        }
     }
 }
